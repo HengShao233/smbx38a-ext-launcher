@@ -202,6 +202,39 @@ namespace XD::Event
             }
         }
 
+        /// @brief 异步地广播 (带广播结束回调)
+        /// @tparam EType 事件类型
+        /// @tparam ...ArgTypes 参数包 (定义事件类型时所指定的参数)
+        /// @param ...args 要传递的参数
+        template<class EType, typename... ArgTypes>
+        requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+            && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
+            static void broadcastAsyncWithCallback(std::function<void(ArgTypes...)> onFinishCall, ArgTypes... args)
+        {
+            std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
+
+            std::size_t hashCode = typeid(EType).hash_code();
+            auto& eDic = _inst->staticEvents;
+            if (eDic.find(hashCode) == eDic.end()) return;
+            for (auto& lDic : eDic[hashCode])
+            {
+                auto cbPtr = reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get());
+                _inst->waitingQueue.emplace_back(
+                    EventAsyncHandler(
+                        &lDic.second,
+                        [cbPtr, args...]() {cbPtr->func(args...); }
+                ));
+                lDic.second.waiting.emplace(--(_inst->waitingQueue.end()));
+            }
+
+            // finish callback
+            _inst->waitingQueue.emplace_back(
+                EventAsyncHandler(
+                    nullptr,
+                    [onFinishCall]() {onFinishCall(args...); }
+            ));
+        }
+
     public:
 
         /// @brief 初始化
