@@ -32,7 +32,7 @@
 - Detours 为微软提供的 Hook 工具
 - engine-extension 为增补程序的主体
 - main 为入口程序
-- redirection 用于关联 ./engine/engine.exe 和 ./engine-extension.dll
+- redirection 用于关联 ./engine/engine-ext.exe 和 ./engine-extension.dll
 
 ### Main
 
@@ -72,9 +72,9 @@
 
 ### Redirection
 
-子工程 redirection 用于链接 engine.exe 和 engine-extension.dll
+子工程 redirection 用于链接 engine-ext.exe 和 engine-extension.dll
 
-该项目根目录中的 engine.zip 所提供的 engine.exe 是打了补丁的（可以用 CFF Explorer），它被后期添加了一个对同目录下 redirection.dll 所导出的名为 "_" 的函数依赖，这使得 engine.exe 打开时会寻找 redirection.dll 并运行其入口函数（dllMain）。
+该项目根目录中的 **./template/engine/engine-ext.exe** 是打了补丁的（可以用 CFF Explorer），它被后期添加了一个对同目录下 redirection.dll 所导出的名为 "_" 的函数依赖，这使得 engine-ext.exe 打开时会寻找 redirection.dll 并运行其入口函数（dllMain）。
 
 redirection.dll 也只干了两件事：
 
