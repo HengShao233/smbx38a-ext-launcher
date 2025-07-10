@@ -58,7 +58,7 @@
    
    
 
-2. 为拉起的程序设置 ENGINE_PASSPORT 环境变量（该环境变量用于阻断直接打开 engine.exe 的行为，该阻断逻辑写在 redirection.dll 中）。
+2. 为拉起的程序设置 ENGINE_PASSPORT 环境变量（该环境变量用于阻断直接打开 engine-ext.exe 的行为，该阻断逻辑写在 redirection.dll 中）。
    ```cpp
    /* ... */
    	auto chNewEnv = new TCHAR[envSize]{ 0 };
