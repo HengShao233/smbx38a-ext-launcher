@@ -38,7 +38,7 @@
 
 子工程 main 只做两件事：
 
-1. 拉起 ./engine/engine.exe（SMBX 源程序），并将入口场景作为参数传递给 SMBX。
+1. 拉起 ./engine/engine-ext.exe（SMBX 源程序），并将入口场景作为参数传递给 SMBX。
    ```cpp
    /* ... */
        if (CreateProcess(
