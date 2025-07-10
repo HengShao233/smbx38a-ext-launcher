@@ -25,10 +25,9 @@ namespace XD::Event
             if (isEmpty) return;
 
             _inst->waitingQueue.front().invoke();
-            _inst->waitingQueue.pop_front();
-
             const auto event = _inst->waitingQueue.front().event;
             if (event) event->waiting.pop();
+            _inst->waitingQueue.pop_front();
         }
     }
 
