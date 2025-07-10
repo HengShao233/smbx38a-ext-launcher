@@ -4,6 +4,7 @@
 #include "passport.h"
 #include <atlstr.h>
 
+#include <string>
 #include <strsafe.h>
 #include <filesystem>
 #include <iostream>
@@ -71,12 +72,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         std::cerr << -4;
         return -4;
     }
-    s = std::filesystem::current_path().string() + s;
 
-    TCHAR launcher[] = _T("./engine/engine.exe \"");
+#ifdef UNICODE
+    const auto curPath = std::filesystem::current_path().wstring() + L"/";
+#else
+    const auto curPath = std::filesystem::current_path().string() + "/";
+#endif // UNICODE
+
+    TCHAR launcher[] = _T("./engine/engine-ext.exe \"");
     TCHAR cmd[2048] = _T("");
 
-    const auto cmdSize = s.size() + (sizeof(launcher) / sizeof(launcher[0]));
+    const auto cmdSize = s.size() + curPath.size() + (sizeof(launcher) / sizeof(launcher[0]));
     const auto pathSize = s.size();
     if (cmdSize >= 2047 || pathSize <= 0) {
         std::cerr << -5;
@@ -86,8 +92,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     USES_CONVERSION;
     auto path = A2T(s.c_str());
 
-    StrCpy(cmd, launcher);
-    StrCpy(cmd + (sizeof(launcher) / sizeof(launcher[0])) - 1, path);
+    auto offset = 0;
+    StrCpy(cmd + offset, launcher);
+
+    offset += (sizeof(launcher) / sizeof(launcher[0])) - 1;
+    StrCpy(cmd + offset, curPath.c_str());
+
+    if (path) {
+        offset += curPath.size();
+        StrCpy(cmd + offset, path);
+    }
+
     cmd[cmdSize - 1] = TCHAR('"');
 
     if (CreateProcess(
@@ -103,6 +118,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         &pi
     )) return 0;
 
+    // fail
     WaitForSingleObject(pi.hProcess, INFINITE);
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
