@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "d3d9Wrapper.h"
 #include "d3d9DevWrapper.h"
 

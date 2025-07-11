@@ -1,8 +1,7 @@
-#include "pch.h"
-#include "hook.h"
+#include "../hook/hook.h"
 #pragma comment(lib, "../detours/lib.X86/detours.lib")
 
-#include "d3dHook.h"
+#include "../hook/d3d9/d3dHook.h"
 #include "msgBoxHook.h"
 #include "showWindowHook.h"
 #include "getMessageHook.h"

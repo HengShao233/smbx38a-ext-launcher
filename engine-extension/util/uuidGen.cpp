@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #define UUID_TIME_GENERATOR
 #ifdef _WIN32
 #include "windows.h"

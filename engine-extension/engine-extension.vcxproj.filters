@@ -16,9 +16,6 @@
     <Filter Include="源文件\hook">
       <UniqueIdentifier>{59e541ab-953b-4ab1-995f-7e71aef5dc85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\dllBase">
-      <UniqueIdentifier>{3d0359b5-e2e0-4645-b42e-2eb93e5334a3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\hook">
       <UniqueIdentifier>{ced61da1-4474-48cf-acab-ff137b563608}</UniqueIdentifier>
     </Filter>
@@ -57,49 +54,43 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>头文件\dllBase</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>头文件\dllBase</Filter>
-    </ClInclude>
-    <ClInclude Include="msgBoxHook.h">
+    <ClInclude Include="hook\msgBoxHook.h">
       <Filter>头文件\hook</Filter>
     </ClInclude>
-    <ClInclude Include="d3d9DevWrapper.h">
+    <ClInclude Include="hook\d3d9\d3d9Wrapper.h">
       <Filter>头文件\hook\d3d9</Filter>
     </ClInclude>
-    <ClInclude Include="d3d9Wrapper.h">
+    <ClInclude Include="hook\d3d9\d3d9DevWrapper.h">
       <Filter>头文件\hook\d3d9</Filter>
     </ClInclude>
-    <ClInclude Include="d3dHook.h">
+    <ClInclude Include="hook\d3d9\d3dHook.h">
       <Filter>头文件\hook\d3d9</Filter>
     </ClInclude>
-    <ClInclude Include="hook.h">
+    <ClInclude Include="hook\hook.h">
       <Filter>头文件\hook</Filter>
     </ClInclude>
-    <ClInclude Include="strUtil.h">
+    <ClInclude Include="util\strUtil.h">
       <Filter>头文件\util</Filter>
     </ClInclude>
-    <ClInclude Include="showWindowHook.h">
+    <ClInclude Include="hook\showWindowHook.h">
       <Filter>头文件\hook</Filter>
     </ClInclude>
-    <ClInclude Include="winapiUtil.h">
+    <ClInclude Include="util\winapiUtil.h">
       <Filter>头文件\util</Filter>
     </ClInclude>
     <ClInclude Include="smbxContext.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="uuid.h">
+    <ClInclude Include="3rd\uuid.h">
       <Filter>头文件\3rd</Filter>
     </ClInclude>
-    <ClInclude Include="staticEventMgr.hpp">
+    <ClInclude Include="util\staticEventMgr.hpp">
       <Filter>头文件\util</Filter>
     </ClInclude>
-    <ClInclude Include="timeMgr.h">
+    <ClInclude Include="util\timeMgr.h">
       <Filter>头文件\util</Filter>
     </ClInclude>
-    <ClInclude Include="uuidGen.h">
+    <ClInclude Include="util\uuidGen.h">
       <Filter>头文件\util</Filter>
     </ClInclude>
     <ClInclude Include="event.h">
@@ -108,28 +99,28 @@
     <ClInclude Include="window.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="logger.h">
+    <ClInclude Include="util\logger.h">
       <Filter>头文件\util</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="render.h">
+    <ClInclude Include="render\render.h">
       <Filter>头文件\render</Filter>
     </ClInclude>
-    <ClInclude Include="renderInit.h">
+    <ClInclude Include="render\renderInit.h">
       <Filter>头文件\render</Filter>
     </ClInclude>
-    <ClInclude Include="renderInternalDef.h">
+    <ClInclude Include="render\renderInternalDef.h">
       <Filter>头文件\render</Filter>
     </ClInclude>
-    <ClInclude Include="quad.h">
+    <ClInclude Include="render\drawable\quad.h">
       <Filter>头文件\render\drawable</Filter>
     </ClInclude>
-    <ClInclude Include="vertex.h">
+    <ClInclude Include="render\drawable\vertex.h">
       <Filter>头文件\render\drawable</Filter>
     </ClInclude>
-    <ClInclude Include="getMessageHook.h">
+    <ClInclude Include="hook\getMessageHook.h">
       <Filter>头文件\hook</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,67 +128,64 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="msgBoxHook.cpp">
+    <ClCompile Include="hook\msgBoxHook.cpp">
       <Filter>源文件\hook</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="dllBase\dllmain.cpp">
       <Filter>源文件\dllBase</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>源文件\dllBase</Filter>
-    </ClCompile>
-    <ClCompile Include="d3d9DevWrapper.cpp">
+    <ClCompile Include="hook\d3d9\d3d9DevWrapper.cpp">
       <Filter>源文件\hook\d3d9</Filter>
     </ClCompile>
-    <ClCompile Include="d3d9Wrapper.cpp">
+    <ClCompile Include="hook\d3d9\d3d9Wrapper.cpp">
       <Filter>源文件\hook\d3d9</Filter>
     </ClCompile>
-    <ClCompile Include="d3dHook.cpp">
+    <ClCompile Include="hook\d3d9\d3dHook.cpp">
       <Filter>源文件\hook\d3d9</Filter>
     </ClCompile>
-    <ClCompile Include="hook.cpp">
+    <ClCompile Include="hook\hook.cpp">
       <Filter>源文件\hook</Filter>
     </ClCompile>
-    <ClCompile Include="strUtil.cpp">
+    <ClCompile Include="util\strUtil.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
-    <ClCompile Include="showWindowHook.cpp">
+    <ClCompile Include="hook\showWindowHook.cpp">
       <Filter>源文件\hook</Filter>
     </ClCompile>
-    <ClCompile Include="winapiUtil.cpp">
+    <ClCompile Include="util\winapiUtil.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
     <ClCompile Include="smbxContext.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="staticEventMgr.cpp">
+    <ClCompile Include="util\staticEventMgr.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
-    <ClCompile Include="timeMgr.cpp">
+    <ClCompile Include="util\timeMgr.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
-    <ClCompile Include="uuidGen.cpp">
+    <ClCompile Include="util\uuidGen.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
     <ClCompile Include="window.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="logger.cpp">
+    <ClCompile Include="util\logger.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
-    <ClCompile Include="render.cpp">
+    <ClCompile Include="render\render.cpp">
       <Filter>源文件\render</Filter>
     </ClCompile>
-    <ClCompile Include="renderDevice.cpp">
+    <ClCompile Include="render\renderDevice.cpp">
       <Filter>源文件\render</Filter>
     </ClCompile>
-    <ClCompile Include="renderResource.cpp">
+    <ClCompile Include="render\renderResource.cpp">
       <Filter>源文件\render</Filter>
     </ClCompile>
-    <ClCompile Include="quad.cpp">
+    <ClCompile Include="render\drawable\quad.cpp">
       <Filter>源文件\render\drawable</Filter>
     </ClCompile>
-    <ClCompile Include="getMessageHook.cpp">
+    <ClCompile Include="hook\getMessageHook.cpp">
       <Filter>源文件\hook</Filter>
     </ClCompile>
   </ItemGroup>
@@ -207,10 +195,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="vertex.hlsl">
+    <FxCompile Include="shaders\vertex.hlsl">
       <Filter>着色器</Filter>
     </FxCompile>
-    <FxCompile Include="pixel.hlsl">
+    <FxCompile Include="shaders\pixel.hlsl">
       <Filter>着色器</Filter>
     </FxCompile>
   </ItemGroup>

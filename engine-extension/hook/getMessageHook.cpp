@@ -1,11 +1,11 @@
-#include "pch.h"
 #include "getMessageHook.h"
 
+#include <Windows.h>
 #include <fstream>
 #include <detours.h>
 
-#include "logger.h"
-#include "strUtil.h"
+#include "../util/logger.h"
+#include "../util/strUtil.h"
 
 typedef int (WINAPI* GetMesage_t)(
     _Out_ LPMSG lpMsg,

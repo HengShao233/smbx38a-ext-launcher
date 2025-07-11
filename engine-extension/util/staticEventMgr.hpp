@@ -11,7 +11,7 @@
 #include <list>
 #include <mutex>
 
-#include "uuid.h"
+#include "../3rd/uuid.h"
 
 #include "logger.h"
 

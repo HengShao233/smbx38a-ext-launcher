@@ -1,10 +1,9 @@
-#include "pch.h"
 #include "d3d9DevWrapper.h"
 
-#include "logger.h"
+#include "../../util/logger.h"
 #include <wrl.h>
 
-#include "render.h"
+#include "../..//render/render.h"
 
 void SmbxUpdate();
 namespace ExEngine::SMBX { void __Try_LoadWnd_Update(); }

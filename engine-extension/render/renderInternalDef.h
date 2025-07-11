@@ -1,9 +1,9 @@
 #pragma once
 
 #include "render.h"
-#include "logger.h"
-#include "uuidGen.h"
-#include "smbxContext.h"
+#include "../util/logger.h"
+#include "../util/uuidGen.h"
+#include "../smbxContext.h"
 
 #include <wrl.h>
 #include <dxgi.h>

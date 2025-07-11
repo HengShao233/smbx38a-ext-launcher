@@ -1,5 +1,4 @@
 ﻿// dllmain.cpp : 定义 DLL 应用程序的入口点。
-#include "pch.h"
 #include "Windows.h"
 #include <string>
 
@@ -19,7 +18,7 @@ namespace ExEngine::Logger { void __DebugLogUtil_DeInitLog(); }
 #include <fstream>
 #include <sstream>
 
-#include "logger.h"
+#include "../util/logger.h"
 
 class Updater
 {

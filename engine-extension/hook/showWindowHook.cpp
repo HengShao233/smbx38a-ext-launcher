@@ -1,10 +1,10 @@
-#include "pch.h"
 #include "showWindowHook.h"
 
+#include <Windows.h>
 #include "detours.h"
-#include "logger.h"
-#include "strUtil.h"
-#include "winapiUtil.h"
+#include "../util/logger.h"
+#include "../util/strUtil.h"
+#include "../util/winapiUtil.h"
 
 using namespace ExEngine;
 namespace ExEngine::SMBX { bool __Try_LoadWnd(HWND hWnd, int cmd); }

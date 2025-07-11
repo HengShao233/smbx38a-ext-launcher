@@ -1,15 +1,13 @@
-#include "pch.h"
-
 #include <fstream>
 
-#include "hook.h"
-#include "logger.h"
+#include "hook/hook.h"
+#include "util/logger.h"
 
-#include "timeMgr.h"
-#include "staticEventMgr.hpp"
+#include "util/timeMgr.h"
+#include "util/staticEventMgr.hpp"
 
 #include "window.h"
-#include "render.h"
+#include "render/render.h"
 #include "smbxContext.h"
 
 // Õ‚π““˝«Ê∆Ù∂Ø

@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "winapiUtil.h"
 #include "strUtil.h"
 

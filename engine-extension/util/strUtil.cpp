@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "strUtil.h"
 
 #include <string>

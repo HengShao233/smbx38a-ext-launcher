@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "d3dHook.h"
 #include "d3d9Wrapper.h"
 

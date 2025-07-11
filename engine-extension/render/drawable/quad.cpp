@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "quad.h"
 
 namespace ExEngine::Render

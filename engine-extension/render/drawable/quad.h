@@ -3,7 +3,7 @@
 #include "vertex.h"
 #include <DirectXMath.h>
 
-#include "renderInternalDef.h"
+#include "../renderInternalDef.h"
 
 namespace ExEngine::Render
 {

@@ -1,10 +1,10 @@
-#include "pch.h"
 #include <fstream>
+#include <Windows.h>
 
 #include <detours.h>
 
-#include "logger.h"
-#include "strUtil.h"
+#include "../util/logger.h"
+#include "../util/strUtil.h"
 
 typedef int (WINAPI* MessageBoxW_t)(HWND, LPCWSTR, LPCWSTR, UINT);
 MessageBoxW_t TrueMessageBoxW = MessageBoxW;

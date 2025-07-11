@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #include "smbxContext.h"
-#include "staticEventMgr.hpp"
+#include "util/staticEventMgr.hpp"
 
 namespace XD::Event
 {

@@ -1,6 +1,5 @@
-#include "pch.h"
-#include "logger.h"
-#include "winapiUtil.h"
+#include "util/logger.h"
+#include "util/winapiUtil.h"
 #include "smbxContext.h"
 #include "event.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "uuid.h"
+#include "../3rd/uuid.h"
 
 namespace XD::UUID
 {
