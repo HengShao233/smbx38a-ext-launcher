@@ -41,7 +41,7 @@
 大体结构参考 `./template` 目录，以下**步骤以该目录作为根目录**：
 
 - 将构建制品中的 main.exe 和 engine-extension.dll 放到 `./` 目录（根目录）下。
-- 将 smbx38a editor 放到 `./engine` 目录下，并删除原 editor.exe（smbx.exe）。我们使用打了补丁的 engine-ext.exe 作为 smbx 本体的启动程序。
+- 将 smbx38a editor 放到 `./engine` 目录下，并删除原 editor.exe（smbx.exe）。我们使用目录中原本放有的一个打了补丁的 engine-ext.exe 作为 smbx 本体的启动程序。
 - 将构建制品中的 redirection.dll 放到 `./engine` 目录下。
 - 将构建制品中的着色器编译结果 （`*.cso`）放到 `./assets/shaders/`目录下。
 - 将游戏关卡放到 `./assets/game` 目录下。并用记事本编辑该目录下的 main 文件。该文件分为两行，第一行为从 `./`目录到关卡文件的路径，第二行为打开游戏后的窗口名（扩展引擎靠这个定位到 smbx 的主窗口对象，如果不填第二行窗口名则默认为 `Super Mario Bros. X by 38A - Version 1.4.5`）。
