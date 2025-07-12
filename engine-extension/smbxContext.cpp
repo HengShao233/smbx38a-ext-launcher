@@ -1,4 +1,4 @@
-#include "util/logger.h"
+ï»¿#include "util/logger.h"
 #include "util/winapiUtil.h"
 #include "smbxContext.h"
 #include "event.h"
@@ -13,7 +13,7 @@ namespace ExEngine::SMBX
 {
   static HWND _HWND_WAIT = NULL;
 
-  // ÎÒÃÇÔİÇÒÄÃÕâ¸öÅĞ¶¨Ò»¸ö´°¿ÚÊÇ·ñÊÇ smbx38a µÄÖ÷´°¿Ú
+  // æˆ‘ä»¬æš‚ä¸”æ‹¿è¿™ä¸ªåˆ¤å®šä¸€ä¸ªçª—å£æ˜¯å¦æ˜¯ smbx38a çš„ä¸»çª—å£
   auto mainWindowSignature = std::string("Super Mario Bros. X by 38A - Version 1.4.5");
 
   static SmbxCtx& Get_Internal()
@@ -58,10 +58,10 @@ namespace ExEngine::SMBX
     return true;
   }
 
-  void __Try_LoadWnd_Update() // ÓĞÊ±ºò smbx38a ²»»áµ÷ showWindow º¯Êı(²»ÖªµÀÎªÊ²Ã´......), ÕâÀïÎªÁË¶µµ×½øĞĞÒ»¸öÂÖÑ¯
-                              // ¸Ãº¯Êı·ÅÔÚ D3d9 µÄ Present ÖĞ±»µ÷ÓÃ, ÒòÎªÕâÑùÄÜ¸ú smbx µÄÖ÷Ñ­»·Í¬²½ÔËĞĞ
-                              // ÒÅº¶µÄÊÇÕâÑù×öµÄ»°, ÔÚ D3d9 Dev ±»´´½¨³öÀ´Ç°Íâ¹ÒÒıÇæ²»»áÆô¶¯ÁË......»á´øÀ´Ò»¸öÍ£¶ÙÊ±¼ä......
-                              // ËùÒÔ¾ßÌå showWindow º¯Êı²»»á±»µ÷µÄÔ­Òò»¹ÔÚË¼¿¼ÖĞ......
+  void __Try_LoadWnd_Update() // æœ‰æ—¶å€™ smbx38a ä¸ä¼šè°ƒ showWindow å‡½æ•°(ä¸çŸ¥é“ä¸ºä»€ä¹ˆ......), è¿™é‡Œä¸ºäº†å…œåº•è¿›è¡Œä¸€ä¸ªè½®è¯¢
+                              // è¯¥å‡½æ•°æ”¾åœ¨ D3d9 çš„ Present ä¸­è¢«è°ƒç”¨, å› ä¸ºè¿™æ ·èƒ½è·Ÿ smbx çš„ä¸»å¾ªç¯åŒæ­¥è¿è¡Œ
+                              // é—æ†¾çš„æ˜¯è¿™æ ·åšçš„è¯, åœ¨ D3d9 Dev è¢«åˆ›å»ºå‡ºæ¥å‰å¤–æŒ‚å¼•æ“ä¸ä¼šå¯åŠ¨äº†......ä¼šå¸¦æ¥ä¸€ä¸ªåœé¡¿æ—¶é—´......
+                              // æ‰€ä»¥å…·ä½“ showWindow å‡½æ•°ä¸ä¼šè¢«è°ƒçš„åŸå› è¿˜åœ¨æ€è€ƒä¸­......
   {
     auto& ctx = Get();
     if (ctx.MainWindow) return;
@@ -80,7 +80,7 @@ namespace ExEngine::SMBX
     }
   }
 
-  static BOOL CALLBACK FindWindowProc(HWND hwnd, LPARAM lParam)	// Ñ°ÕÒÒ»¸ö·ûºÏÌõ¼şµÄ´°¿Ú
+  static BOOL CALLBACK FindWindowProc(HWND hwnd, LPARAM lParam)	// å¯»æ‰¾ä¸€ä¸ªç¬¦åˆæ¡ä»¶çš„çª—å£
   {
     if (_HWND_WAIT) return FALSE;
     static std::chrono::time_point<std::chrono::steady_clock> start =
@@ -95,7 +95,7 @@ namespace ExEngine::SMBX
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-    // Èç¹û³¬¹ı 20 Ãë»¹Ã»ÕÒµ½ÈÎºÎÒ»¸ö·ûºÏÌõ¼şµÄ smbx Ö÷´°¿Ú, ÔòÇ¿ÖÆÍË³ö½ø³Ì
+    // å¦‚æœè¶…è¿‡ 20 ç§’è¿˜æ²¡æ‰¾åˆ°ä»»ä½•ä¸€ä¸ªç¬¦åˆæ¡ä»¶çš„ smbx ä¸»çª—å£, åˆ™å¼ºåˆ¶é€€å‡ºè¿›ç¨‹
     if (duration.count() > 20000) { 
       Logger::Info("find window fail: %i", processId);
       ExitProcess(-4);
@@ -104,9 +104,9 @@ namespace ExEngine::SMBX
     return TRUE;
   }
 
-  void __LoadWindowSupplement()	// ÕâÀïÊÇÎªÁËÔ¤·À smbx Ã»µ÷ÓÃ showWindow º¯Êı¶ø×öµÄÇ¿ÖÆËÑË÷
-                                // ±éÀú¸Ã½ø³ÌÏÂµÄËùÓĞ HWND ÊµÀı, ÕÒµ½ smbx µÄÓÎÏ·Ö÷´°¿Ú
-                                // Èç¹ûÕÒµ½ÁË¾Í´æÔÚ _HWND_WAIT Àï, ÓÉ smbx Ö÷Ñ­»·Æô¶¯´´½¨Íâ¹ÒÒıÇæ __Try_LoadWnd_Update()
+  void __LoadWindowSupplement()	// è¿™é‡Œæ˜¯ä¸ºäº†é¢„é˜² smbx æ²¡è°ƒç”¨ showWindow å‡½æ•°è€Œåšçš„å¼ºåˆ¶æœç´¢
+                                // éå†è¯¥è¿›ç¨‹ä¸‹çš„æ‰€æœ‰ HWND å®ä¾‹, æ‰¾åˆ° smbx çš„æ¸¸æˆä¸»çª—å£
+                                // å¦‚æœæ‰¾åˆ°äº†å°±å­˜åœ¨ _HWND_WAIT é‡Œ, ç”± smbx ä¸»å¾ªç¯å¯åŠ¨åˆ›å»ºå¤–æŒ‚å¼•æ“ __Try_LoadWnd_Update()
   {
     if (Get().MainWindow) { return; }
     auto processId = GetCurrentProcessId();

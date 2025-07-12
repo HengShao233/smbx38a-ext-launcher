@@ -64,13 +64,12 @@ private:
       auto start = clock::now();
       ExEngine::SMBX::__LoadWindowSupplement();
       MainUpdate((float)(time.count() / 1000.0));
-      auto end = clock::now();
 
-      time = end - start;
-      if (time.count() < FRAME_DURATION) {
-        auto step = std::chrono::milliseconds((int)FRAME_DURATION) - time;
-        if (step.count() > 0) std::this_thread::sleep_for(step);
-      }
+      // 如果帧率过高就空转
+      do {
+        auto end = clock::now();
+        time = end - start;
+      } while (time.count() < FRAME_DURATION);
 
       if (!_running) break;
     }
