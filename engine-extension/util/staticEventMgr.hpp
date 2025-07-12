@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <functional>
 #include <map>
@@ -13,237 +13,234 @@
 
 #include "../3rd/uuid.h"
 
-#include "logger.h"
-
 namespace XD::Event
 {
-    /// @brief ÊÂ¼şÀà»ù
-    /// @example class OnMouseClick : public EventTypeBase<OnMouseClick, uint8_t> {};
-    /// @tparam EType ÊÂ¼şÀà±¾Éí
-    /// @tparam ...ArgTypes ÊÂ¼şÀàµÄ±äÁ¿ÀàĞÍ
-    template<class EType, typename... ArgTypes>
-    class EventTypeBase
+  /// @brief äº‹ä»¶ç±»åŸº
+  /// @example class OnMouseClick : public EventTypeBase<OnMouseClick, uint8_t> {};
+  /// @tparam EType äº‹ä»¶ç±»æœ¬èº«
+  /// @tparam ...ArgTypes äº‹ä»¶ç±»çš„å˜é‡ç±»å‹
+  template<class EType, typename... ArgTypes>
+  class EventTypeBase
+  {
+  public:
+    using _xd_eType = EventTypeBase<EType, ArgTypes...>;
+    using _xd_fType = std::function<void(ArgTypes...)>;
+    using _xd_isEventType = std::true_type;
+  };
+
+  class _xd_staticEvent_BaseFunc { public: virtual ~_xd_staticEvent_BaseFunc() = default; };
+  template<class EType>
+  class _xd_staticEvent_Func : public _xd_staticEvent_BaseFunc
+  {
+  public:
+    explicit _xd_staticEvent_Func(typename EType::_xd_fType func) : func(func) {}
+    typename EType::_xd_fType func;
+  };
+
+  class StaticEventMgr
+  {
+  private:
+    struct EventAsyncHandler;
+    struct EventHandler
     {
     public:
-        using _xd_eType = EventTypeBase<EType, ArgTypes...>;
-        using _xd_fType = std::function<void(ArgTypes...)>;
-        using _xd_isEventType = std::true_type;
+      EventHandler(uuids::uuid objId, std::unique_ptr<_xd_staticEvent_BaseFunc>&& cb)
+        :objId(objId), cb(std::move(cb)), waiting(std::queue<std::list<EventAsyncHandler>::const_iterator>()) {}
+      uuids::uuid objId = uuids::uuid();
+      std::unique_ptr<_xd_staticEvent_BaseFunc> cb = nullptr;
+      std::queue<std::list<EventAsyncHandler>::const_iterator> waiting;
     };
 
-    class _xd_staticEvent_BaseFunc { public: virtual ~_xd_staticEvent_BaseFunc() = default; };
+    struct EventAsyncHandler
+    {
+    public:
+      EventAsyncHandler(EventHandler* event, std::function<void()> invoke)
+        :event(event), invoke(std::move(invoke)) {}
+      EventHandler* event = nullptr;
+      std::function<void()> invoke;
+    };
+
+    class EventMgrData
+    {
+    public:
+      /// @brief mutex
+      std::recursive_mutex                               mtx;
+      /// @brief é™æ€äº‹ä»¶ <äº‹ä»¶id, <äº‹ä»¶ç›‘å¬æˆå‘˜, EventHandler>>
+      std::unordered_map<std::size_t, std::map<uuids::uuid, EventHandler>> staticEvents;
+      /// @brief å¼‚æ­¥äº‹ä»¶çš„ç­‰å¾…é˜Ÿåˆ—
+      std::list<EventAsyncHandler>                     waitingQueue;
+    };
+    static std::unique_ptr<EventMgrData> _inst;
+
+  public:
+    /// @brief æ³¨å†Œäº‹ä»¶ æ¯ä¸ª obj åªèƒ½æ³¨å†Œä¸€æ¬¡ç›¸åŒäº‹ä»¶ å¤šä½™çš„æ³¨å†Œä¼šè¢«ç•¥è¿‡
+    /// @tparam EType æ³¨å†Œçš„äº‹ä»¶ç±»å‹
+    /// @param obj ç›‘å¬å™¨çš„ id (ä¸€èˆ¬ç”¨å¯¹è±¡å†…å­˜åœ°å€æè¿°)
+    /// @param cb äº‹ä»¶çš„å›è°ƒ
+    /// @return æ³¨å†Œåˆ°äº‹ä»¶çš„å“ˆå¸Œå€¼åŒ… (å¯ä»¥ä½¿ç”¨è¿™ä¸ªå“ˆå¸Œå€¼æ³¨é”€äº‹ä»¶)
     template<class EType>
-    class _xd_staticEvent_Func : public _xd_staticEvent_BaseFunc
+      requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+    static std::optional<std::size_t> registerEvent(uuids::uuid obj, typename EType::_xd_fType cb)
     {
-    public:
-        explicit _xd_staticEvent_Func(typename EType::_xd_fType func) : func(func) {}
-        typename EType::_xd_fType func;
-    };
+      std::size_t hashCode = typeid(EType).hash_code();
+      auto& eDic = _inst->staticEvents;
+      if (eDic.find(hashCode) == eDic.end())
+        eDic.insert({ hashCode, std::map<uuids::uuid, EventHandler>() });
+      auto& lDic = eDic[hashCode];
+      if (lDic.find(obj) != lDic.end()) return std::nullopt;
+      lDic.insert(std::pair(obj, EventHandler(
+        obj,
+        std::unique_ptr<_xd_staticEvent_BaseFunc>
+        (reinterpret_cast<_xd_staticEvent_BaseFunc*>(new _xd_staticEvent_Func<EType>(cb)))
+      )));
+      return std::make_optional<std::size_t>(hashCode);
+    }
 
-    class StaticEventMgr
+    /// @brief æ³¨é”€äº‹ä»¶
+    /// @tparam EType æ³¨é”€çš„äº‹ä»¶ç±»å‹
+    /// @param obj ç›‘å¬å™¨çš„ id (ä¸€èˆ¬ç”¨å¯¹è±¡å†…å­˜åœ°å€æè¿°)
+    template<class EType>
+      requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+    static std::optional<std::size_t> unregisterEvent(uuids::uuid obj)
     {
-    private:
-        struct EventAsyncHandler;
-        struct EventHandler
-        {
-        public:
-            EventHandler(uuids::uuid objId, std::unique_ptr<_xd_staticEvent_BaseFunc>&& cb)
-                :objId(objId), cb(std::move(cb)), waiting(std::queue<std::list<EventAsyncHandler>::const_iterator>()) {}
-            uuids::uuid objId = uuids::uuid();
-            std::unique_ptr<_xd_staticEvent_BaseFunc> cb = nullptr;
-            std::queue<std::list<EventAsyncHandler>::const_iterator> waiting;
-        };
+      std::size_t hashCode = typeid(EType).hash_code();
+      auto& eDic = _inst->staticEvents;
+      if (eDic.find(hashCode) == eDic.end()) return std::nullopt;
+      auto& lDic = eDic[hashCode];
+      if (lDic.find(obj) == lDic.end()) return std::nullopt;
+      auto eH = lDic.find(obj);
 
-        struct EventAsyncHandler
-        {
-        public:
-            EventAsyncHandler(EventHandler* event, std::function<void()> invoke)
-                :event(event), invoke(std::move(invoke)) {}
-            EventHandler* event = nullptr;
-            std::function<void()> invoke;
-        };
+      while (!eH->second.waiting.empty())
+      {
+        _inst->waitingQueue.erase(eH->second.waiting.front());
+        eH->second.waiting.pop();
+      }
 
-        class EventMgrData
-        {
-        public:
-            /// @brief mutex
-            std::recursive_mutex                                                           mtx;
-            /// @brief ¾²Ì¬ÊÂ¼ş <ÊÂ¼şid, <ÊÂ¼ş¼àÌı³ÉÔ±, EventHandler>>
-            std::unordered_map<std::size_t, std::map<uuids::uuid, EventHandler>> staticEvents;
-            /// @brief Òì²½ÊÂ¼şµÄµÈ´ı¶ÓÁĞ
-            std::list<EventAsyncHandler>                                         waitingQueue;
-            
-        };
-        static std::unique_ptr<EventMgrData> _inst;
+      lDic.erase(eH);
+      return std::make_optional<std::size_t>(hashCode);
+    }
 
-    public:
-        /// @brief ×¢²áÊÂ¼ş Ã¿¸ö obj Ö»ÄÜ×¢²áÒ»´ÎÏàÍ¬ÊÂ¼ş ¶àÓàµÄ×¢²á»á±»ÂÔ¹ı
-        /// @tparam EType ×¢²áµÄÊÂ¼şÀàĞÍ
-        /// @param obj ¼àÌıÆ÷µÄ id (Ò»°ãÓÃ¶ÔÏóÄÚ´æµØÖ·ÃèÊö)
-        /// @param cb ÊÂ¼şµÄ»Øµ÷
-        /// @return ×¢²áµ½ÊÂ¼şµÄ¹şÏ£Öµ°ü (¿ÉÒÔÊ¹ÓÃÕâ¸ö¹şÏ£Öµ×¢ÏúÊÂ¼ş)
-        template<class EType>
-            requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
-        static std::optional<std::size_t> registerEvent(uuids::uuid obj, typename EType::_xd_fType cb)
+    /// @brief æ³¨é”€äº‹ä»¶
+    /// @param hashCode äº‹ä»¶çš„å“ˆå¸Œå€¼
+    /// @param obj ç›‘å¬å™¨çš„ id (ä¸€èˆ¬ç”¨å¯¹è±¡å†…å­˜åœ°å€æè¿°)
+    static void unregisterEvent(const std::size_t& hashCode, uuids::uuid obj);
+
+    /// @brief æ³¨é”€äº‹ä»¶
+    /// @param hashCodeOpt äº‹ä»¶çš„å“ˆå¸Œå€¼åŒ…
+    /// @param obj ç›‘å¬å™¨çš„ id (ä¸€èˆ¬ç”¨å¯¹è±¡å†…å­˜åœ°å€æè¿°)
+    static void unregisterEvent(const std::optional<std::size_t>& hashCodeOpt, uuids::uuid obj);
+
+    /// @brief æŸäº‹ä»¶çš„æ‰€æœ‰ç›‘å¬
+    /// @tparam EType äº‹ä»¶ç±»å‹
+    template<class EType>
+      requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+    static void clearEvent()
+    {
+      std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
+
+      std::size_t hashCode = typeid(EType).hash_code();
+      auto& eDic = _inst->staticEvents;
+      if (eDic.find(hashCode) == eDic.end()) return;
+      for (auto& lDic : eDic[hashCode])
+      {
+        while (!lDic.second.waiting.empty())
         {
-            std::size_t hashCode = typeid(EType).hash_code();
-            auto& eDic = _inst->staticEvents;
-            if (eDic.find(hashCode) == eDic.end())
-                eDic.insert({ hashCode, std::map<uuids::uuid, EventHandler>() });
-            auto& lDic = eDic[hashCode];
-            if (lDic.find(obj) != lDic.end()) return std::nullopt;
-            lDic.insert(std::pair(obj, EventHandler(
-                obj,
-                std::unique_ptr<_xd_staticEvent_BaseFunc>
-                (reinterpret_cast<_xd_staticEvent_BaseFunc*>(new _xd_staticEvent_Func<EType>(cb)))
-            )));
-            return std::make_optional<std::size_t>(hashCode);
+          _inst->waitingQueue.erase(lDic.second.waiting.front());
+          lDic.second.waiting.pop();
         }
+      }
+      eDic.erase(hashCode);
+    }
 
-        /// @brief ×¢ÏúÊÂ¼ş
-        /// @tparam EType ×¢ÏúµÄÊÂ¼şÀàĞÍ
-        /// @param obj ¼àÌıÆ÷µÄ id (Ò»°ãÓÃ¶ÔÏóÄÚ´æµØÖ·ÃèÊö)
-        template<class EType>
-            requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
-        static std::optional<std::size_t> unregisterEvent(uuids::uuid obj)
-        {
-            std::size_t hashCode = typeid(EType).hash_code();
-            auto& eDic = _inst->staticEvents;
-            if (eDic.find(hashCode) == eDic.end()) return std::nullopt;
-            auto& lDic = eDic[hashCode];
-            if (lDic.find(obj) == lDic.end()) return std::nullopt;
-            auto eH = lDic.find(obj);
+    /// @brief å¹¿æ’­
+    /// @tparam EType äº‹ä»¶ç±»å‹
+    /// @tparam ...ArgTypes å‚æ•°åŒ… (å®šä¹‰äº‹ä»¶ç±»å‹æ—¶æ‰€æŒ‡å®šçš„å‚æ•°)
+    /// @param ...args è¦ä¼ é€’å‚æ•°
+    template<class EType, typename... ArgTypes>
+      requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+    && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
+      static void broadcast(ArgTypes... args)
+    {
+      std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
 
-            while (!eH->second.waiting.empty())
-            {
-                _inst->waitingQueue.erase(eH->second.waiting.front());
-                eH->second.waiting.pop();
-            }
+      std::size_t hashCode = typeid(EType).hash_code();
+      auto& eDic = _inst->staticEvents;
+      if (eDic.find(hashCode) == eDic.end()) return;
+      for (auto& lDic : eDic[hashCode])
+      {
+        reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get())->
+          func(std::forward<ArgTypes>(args)...);
+      }
+    }
 
-            lDic.erase(eH);
-            return std::make_optional<std::size_t>(hashCode);
-        }
+    /// @brief å¼‚æ­¥åœ°å¹¿æ’­
+    /// @tparam EType äº‹ä»¶ç±»å‹
+    /// @tparam ...ArgTypes å‚æ•°åŒ… (å®šä¹‰äº‹ä»¶ç±»å‹æ—¶æ‰€æŒ‡å®šçš„å‚æ•°)
+    /// @param ...args è¦ä¼ é€’çš„å‚æ•°
+    template<class EType, typename... ArgTypes>
+      requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+    && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
+      static void broadcastAsync(ArgTypes... args)
+    {
+      std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
 
-        /// @brief ×¢ÏúÊÂ¼ş
-        /// @param hashCode ÊÂ¼şµÄ¹şÏ£Öµ
-        /// @param obj ¼àÌıÆ÷µÄ id (Ò»°ãÓÃ¶ÔÏóÄÚ´æµØÖ·ÃèÊö)
-        static void unregisterEvent(const std::size_t& hashCode, uuids::uuid obj);
+      std::size_t hashCode = typeid(EType).hash_code();
+      auto& eDic = _inst->staticEvents;
+      if (eDic.find(hashCode) == eDic.end()) return;
+      for (auto& lDic : eDic[hashCode])
+      {
+        auto cbPtr = reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get());
+        _inst->waitingQueue.emplace_back(
+          EventAsyncHandler(
+            &lDic.second,
+            [cbPtr, args...]() {cbPtr->func(args...); }
+          ));
+        lDic.second.waiting.emplace(--(_inst->waitingQueue.end()));
+      }
+    }
 
-        /// @brief ×¢ÏúÊÂ¼ş
-        /// @param hashCodeOpt ÊÂ¼şµÄ¹şÏ£Öµ°ü
-        /// @param obj ¼àÌıÆ÷µÄ id (Ò»°ãÓÃ¶ÔÏóÄÚ´æµØÖ·ÃèÊö)
-        static void unregisterEvent(const std::optional<std::size_t>& hashCodeOpt, uuids::uuid obj);
+    /// @brief å¼‚æ­¥åœ°å¹¿æ’­ (å¸¦å¹¿æ’­ç»“æŸå›è°ƒ)
+    /// @tparam EType äº‹ä»¶ç±»å‹
+    /// @tparam ...ArgTypes å‚æ•°åŒ… (å®šä¹‰äº‹ä»¶ç±»å‹æ—¶æ‰€æŒ‡å®šçš„å‚æ•°)
+    /// @param ...args è¦ä¼ é€’çš„å‚æ•°
+    template<class EType, typename... ArgTypes>
+    requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
+      && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
+      static void broadcastAsyncWithCallback(std::function<void(ArgTypes...)> onFinishCall, ArgTypes... args)
+    {
+      std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
 
-        /// @brief Ä³ÊÂ¼şµÄËùÓĞ¼àÌı
-        /// @tparam EType ÊÂ¼şÀàĞÍ
-        template<class EType>
-            requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
-        static void clearEvent()
-        {
-            std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
+      std::size_t hashCode = typeid(EType).hash_code();
+      auto& eDic = _inst->staticEvents;
+      if (eDic.find(hashCode) == eDic.end()) return;
+      for (auto& lDic : eDic[hashCode])
+      {
+        auto cbPtr = reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get());
+        _inst->waitingQueue.emplace_back(
+          EventAsyncHandler(
+            &lDic.second,
+            [cbPtr, args...]() {cbPtr->func(args...); }
+        ));
+        lDic.second.waiting.emplace(--(_inst->waitingQueue.end()));
+      }
 
-            std::size_t hashCode = typeid(EType).hash_code();
-            auto& eDic = _inst->staticEvents;
-            if (eDic.find(hashCode) == eDic.end()) return;
-            for (auto& lDic : eDic[hashCode])
-            {
-                while (!lDic.second.waiting.empty())
-                {
-                    _inst->waitingQueue.erase(lDic.second.waiting.front());
-                    lDic.second.waiting.pop();
-                }
-            }
-            eDic.erase(hashCode);
-        }
+      // finish callback
+      _inst->waitingQueue.emplace_back(
+        EventAsyncHandler(
+          nullptr,
+          [onFinishCall, args...]() {onFinishCall(args...); }
+      ));
+    }
 
-        /// @brief ¹ã²¥
-        /// @tparam EType ÊÂ¼şÀàĞÍ
-        /// @tparam ...ArgTypes ²ÎÊı°ü (¶¨ÒåÊÂ¼şÀàĞÍÊ±ËùÖ¸¶¨µÄ²ÎÊı)
-        /// @param ...args Òª´«µİ²ÎÊı
-        template<class EType, typename... ArgTypes>
-            requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
-        && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
-            static void broadcast(ArgTypes... args)
-        {
-            std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
+  public:
 
-            std::size_t hashCode = typeid(EType).hash_code();
-            auto& eDic = _inst->staticEvents;
-            if (eDic.find(hashCode) == eDic.end()) return;
-            for (auto& lDic : eDic[hashCode])
-            {
-                reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get())->
-                    func(std::forward<ArgTypes>(args)...);
-            }
-        }
+    /// @brief åˆå§‹åŒ–
+    static void init();
 
-        /// @brief Òì²½µØ¹ã²¥
-        /// @tparam EType ÊÂ¼şÀàĞÍ
-        /// @tparam ...ArgTypes ²ÎÊı°ü (¶¨ÒåÊÂ¼şÀàĞÍÊ±ËùÖ¸¶¨µÄ²ÎÊı)
-        /// @param ...args Òª´«µİµÄ²ÎÊı
-        template<class EType, typename... ArgTypes>
-            requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
-        && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
-            static void broadcastAsync(ArgTypes... args)
-        {
-            std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
+    /// @brief åˆ·æ–°å¸§
+    static void update();
 
-            std::size_t hashCode = typeid(EType).hash_code();
-            auto& eDic = _inst->staticEvents;
-            if (eDic.find(hashCode) == eDic.end()) return;
-            for (auto& lDic : eDic[hashCode])
-            {
-                auto cbPtr = reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get());
-                _inst->waitingQueue.emplace_back(
-                    EventAsyncHandler(
-                        &lDic.second,
-                        [cbPtr, args...]() {cbPtr->func(args...); }
-                    ));
-                lDic.second.waiting.emplace(--(_inst->waitingQueue.end()));
-            }
-        }
-
-        /// @brief Òì²½µØ¹ã²¥ (´ø¹ã²¥½áÊø»Øµ÷)
-        /// @tparam EType ÊÂ¼şÀàĞÍ
-        /// @tparam ...ArgTypes ²ÎÊı°ü (¶¨ÒåÊÂ¼şÀàĞÍÊ±ËùÖ¸¶¨µÄ²ÎÊı)
-        /// @param ...args Òª´«µİµÄ²ÎÊı
-        template<class EType, typename... ArgTypes>
-        requires EType::_xd_isEventType::value&& std::is_base_of<typename EType::_xd_eType, EType>::value
-            && std::is_same<typename EType::_xd_fType, std::function<void(ArgTypes...)>>::value
-            static void broadcastAsyncWithCallback(std::function<void(ArgTypes...)> onFinishCall, ArgTypes... args)
-        {
-            std::lock_guard<std::recursive_mutex> lock(_inst->mtx);
-
-            std::size_t hashCode = typeid(EType).hash_code();
-            auto& eDic = _inst->staticEvents;
-            if (eDic.find(hashCode) == eDic.end()) return;
-            for (auto& lDic : eDic[hashCode])
-            {
-                auto cbPtr = reinterpret_cast<_xd_staticEvent_Func<EType>*>(lDic.second.cb.get());
-                _inst->waitingQueue.emplace_back(
-                    EventAsyncHandler(
-                        &lDic.second,
-                        [cbPtr, args...]() {cbPtr->func(args...); }
-                ));
-                lDic.second.waiting.emplace(--(_inst->waitingQueue.end()));
-            }
-
-            // finish callback
-            _inst->waitingQueue.emplace_back(
-                EventAsyncHandler(
-                    nullptr,
-                    [onFinishCall]() {onFinishCall(args...); }
-            ));
-        }
-
-    public:
-
-        /// @brief ³õÊ¼»¯
-        static void init();
-
-        /// @brief Ë¢ĞÂÖ¡
-        static void update();
-
-        /// @brief Ïú»Ù
-        static void destroy();
-    };
+    /// @brief é”€æ¯
+    static void destroy();
+  };
 } // namespace XD::Event

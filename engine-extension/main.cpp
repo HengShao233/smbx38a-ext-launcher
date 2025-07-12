@@ -1,4 +1,4 @@
-#include <fstream>
+ï»¿#include <fstream>
 
 #include "hook/hook.h"
 #include "util/logger.h"
@@ -10,92 +10,92 @@
 #include "render/render.h"
 #include "smbxContext.h"
 
-// Íâ¹ÒÒıÇæÆô¶¯
+// å¤–æŒ‚å¼•æ“å¯åŠ¨
 void MainStart()
 {
-	try
-	{
-		// enginex start
-		ExEngine::Logger::Info("engine-ext: launch");
+  try
+  {
+    // enginex start
+    ExEngine::Logger::Info("engine-ext: launch");
 
-		// hook
-		ExEngine::Hook::Attach();
+    // hook
+    ExEngine::Hook::Attach();
 
-		// init managers
-		XD::Util::TimeMgr::init();
-		XD::Event::StaticEventMgr::init();
+    // init managers
+    XD::Util::TimeMgr::init();
+    XD::Event::StaticEventMgr::init();
 
-		// init module
-		ExEngine::Window::DoInit();
-		ExEngine::Render::DoInit();
-	}
-	catch (const std::exception& e)
-	{
-		auto s = e.what();
-		if (!s || strnlen_s(s, 1) <= 0) ExitProcess(-1);
-		ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
-		ExitProcess(-1);
-	}
+    // init module
+    ExEngine::Window::DoInit();
+    ExEngine::Render::DoInit();
+  }
+  catch (const std::exception& e)
+  {
+    auto s = e.what();
+    if (!s || strnlen_s(s, 1) <= 0) ExitProcess(-1);
+    ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
+    ExitProcess(-1);
+  }
 }
 
-// smbx µÄÖ÷Ñ­»·, ÓÉ D3d9 µÄ Present º¯Êı´ø¶¯
-// ËùÒÔ D3d9 Éè±¸ÊµÀı´´½¨Ç°Õâ¸öº¯Êı²»»áÔËĞĞ(ËùÒÔ¾Í¸Õ´ò¿ª³ÌĞò¶øÑÔ»áÑÓ³ÙÒ»Ğ©)
+// smbx çš„ä¸»å¾ªç¯, ç”± D3d9 çš„ Present å‡½æ•°å¸¦åŠ¨
+// æ‰€ä»¥ D3d9 è®¾å¤‡å®ä¾‹åˆ›å»ºå‰è¿™ä¸ªå‡½æ•°ä¸ä¼šè¿è¡Œ(æ‰€ä»¥å°±åˆšæ‰“å¼€ç¨‹åºè€Œè¨€ä¼šå»¶è¿Ÿä¸€äº›)
 void SmbxUpdate()
 {
-	try
-	{
-		// nothing to be done.
-	}
-	catch (const std::exception& e)
-	{
-		auto s = e.what();
-		if (!s || strnlen_s(s, 1) <= 0) ExitProcess(-1);
-		ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
-		ExitProcess(-1);
-	}
+  try
+  {
+    // nothing to be done.
+  }
+  catch (const std::exception& e)
+  {
+    auto s = e.what();
+    if (!s || strnlen_s(s, 1) <= 0) ExitProcess(-1);
+    ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
+    ExitProcess(-1);
+  }
 }
 
-// Íâ¹ÒÒıÇæÖ÷Ñ­»·(ºÍ smbx Ö÷Ñ­»·²»ÔÚÒ»¸öÏß³Ì, Éæ¼°µ½Êı¾İ½»»¥Ê±×¢Òâ¾ºÕùÎÊÌâ)
+// å¤–æŒ‚å¼•æ“ä¸»å¾ªç¯(å’Œ smbx ä¸»å¾ªç¯ä¸åœ¨ä¸€ä¸ªçº¿ç¨‹, æ¶‰åŠåˆ°æ•°æ®äº¤äº’æ—¶æ³¨æ„ç«äº‰é—®é¢˜)
 void MainUpdate(float t)
 {
-	try
-	{
-		// update managers
-		XD::Util::TimeMgr::update();
-		XD::Event::StaticEventMgr::update();
+  try
+  {
+    // update managers
+    XD::Util::TimeMgr::update();
+    XD::Event::StaticEventMgr::update();
 
-		// update module
-		ExEngine::Render::Update(t);
-	}
-	catch (const std::exception& e)
-	{
-		auto s = e.what();
-		if (!s || strnlen_s(s, 1) <= 0) ExitProcess(-1);
-		ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
-		ExitProcess(-1);
-	}
+    // update module
+    ExEngine::Render::Update(t);
+  }
+  catch (const std::exception& e)
+  {
+    auto s = e.what();
+    if (!s || strnlen_s(s, 1) <= 0) ExitProcess(-1);
+    ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
+    ExitProcess(-1);
+  }
 }
 
-// Íâ¹ÒÒıÇæÏú»ÙÇ°Ö´ĞĞ
+// å¤–æŒ‚å¼•æ“é”€æ¯å‰æ‰§è¡Œ
 void MainEnd()
 {
-	try
-	{
-		// de init module
-		ExEngine::Render::DeInit();
+  try
+  {
+    // de init module
+    ExEngine::Render::DeInit();
 
-		// destory managers
-		XD::Util::TimeMgr::destroy();
-		XD::Event::StaticEventMgr::destroy();
+    // destory managers
+    XD::Util::TimeMgr::destroy();
+    XD::Event::StaticEventMgr::destroy();
 
-		// un-hook
-		ExEngine::Hook::Detach();
-	}
-	catch (const std::exception& e)
-	{
-		ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
-	}
+    // un-hook
+    ExEngine::Hook::Detach();
+  }
+  catch (const std::exception& e)
+  {
+    ExEngine::Logger::RuntimeLog("[Exce] %s", e.what());
+  }
 
-	// enginex end
-	ExEngine::Logger::Info("engine-ext: destory");
+  // enginex end
+  ExEngine::Logger::Info("engine-ext: destory");
 }

@@ -5,5 +5,5 @@
 
 namespace XD::UUID
 {
-    uuids::uuid gen();
+  uuids::uuid gen();
 } // namespace XD::Render

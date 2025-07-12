@@ -2,6 +2,6 @@
 
 namespace ExEngine::Hook
 {
-	void AttachGetMessageDetours();
-	void DetachGetMessageDetours();
+  void AttachGetMessageDetours();
+  void DetachGetMessageDetours();
 }

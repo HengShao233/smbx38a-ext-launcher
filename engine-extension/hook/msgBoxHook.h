@@ -2,6 +2,6 @@
 
 namespace ExEngine::Hook
 {
-	void AttachMsgBoxDetours();
-	void DetachMsgBoxDetours();
+  void AttachMsgBoxDetours();
+  void DetachMsgBoxDetours();
 }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <chrono>
 #include <ctime>
@@ -7,29 +7,29 @@
 
 namespace XD::Util::TimeMgr
 {
-    /// @brief ³õÊ¼»¯
-    void init();
+  /// @brief åˆå§‹åŒ–
+  void init();
 
-    /// @brief ÊÇ·ñÒÑ¾­³õÊ¼»¯
-    /// @return ÊÇ·ñÒÑ¾­³õÊ¼»¯
-    bool inited();
+  /// @brief æ˜¯å¦å·²ç»åˆå§‹åŒ–
+  /// @return æ˜¯å¦å·²ç»åˆå§‹åŒ–
+  bool inited();
 
-    /// @brief µ±Ç°Ê±¼ä´Á(´Ó³ÌĞò¿ªÊ¼Ê±¼ÆËã)
-    /// @return µ±Ç°Ê±¼ä´Á
-    clock_t now();
+  /// @brief å½“å‰æ—¶é—´æˆ³(ä»ç¨‹åºå¼€å§‹æ—¶è®¡ç®—)
+  /// @return å½“å‰æ—¶é—´æˆ³
+  clock_t now();
 
-    /// @brief µ±Ç°Ê±¼äµã
-    /// @return µ±Ç°Ê±¼äµã
-    [[maybe_unused]] std::chrono::high_resolution_clock::time_point nowTimePoint();
+  /// @brief å½“å‰æ—¶é—´ç‚¹
+  /// @return å½“å‰æ—¶é—´ç‚¹
+  [[maybe_unused]] std::chrono::high_resolution_clock::time_point nowTimePoint();
 
-    /// @brief ÑÓ³Ù»Øµ÷
-    /// @param cb »Øµ÷
-    /// @param delay ÑÓ³Ù(ms)
-    void delay(const std::function<void()>& cb, clock_t delay);
+  /// @brief å»¶è¿Ÿå›è°ƒ
+  /// @param cb å›è°ƒ
+  /// @param delay å»¶è¿Ÿ(ms)
+  void delay(const std::function<void()>& cb, clock_t delay);
 
-    /// @brief ¸üĞÂÊÂ¼ş
-    void update();
+  /// @brief æ›´æ–°äº‹ä»¶
+  void update();
 
-    /// @brief Ïú»Ù
-    void destroy();
+  /// @brief é”€æ¯
+  void destroy();
 } // namespace XD::Util::Time

@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include <Windows.h>
 #include "../smbxContext.h"
 
 namespace ExEngine::Render
 {
-	void InitRdDevice(SMBX::GameWnd);	// ³õÊ¼»¯äÖÈ¾Éè±¸
-	void InitRdResource();				// ³õÊ¼»¯äÖÈ¾×ÊÔ´
+	void InitRdDevice(SMBX::GameWnd);	// åˆå§‹åŒ–æ¸²æŸ“è®¾å¤‡
+	void InitRdResource();				// åˆå§‹åŒ–æ¸²æŸ“èµ„æº
 }

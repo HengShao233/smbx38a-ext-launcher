@@ -4,9 +4,9 @@
 
 namespace ExEngine::Render
 {
-	void DoInit();
-	void Update(float t);
-	void DeInit();
+  void DoInit();
+  void Update(float t);
+  void DeInit();
 
-	void SendSmbxBuffer(IDirect3DSurface9* backBuffer, IDirect3DDevice9* dev);	// Ìá³Ê smbx38a µÄäÖÈ¾½á¹ûµ½Íâ¹ÒÒýÇæ
+  void SendSmbxBuffer(IDirect3DSurface9* backBuffer, IDirect3DDevice9* dev);	// ï¿½ï¿½ï¿½ smbx38a ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }

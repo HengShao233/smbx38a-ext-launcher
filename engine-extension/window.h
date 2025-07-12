@@ -2,6 +2,6 @@
 
 namespace ExEngine::Window
 {
-	void DoInit();
-	void __TryCloseMaskWindow();
+  void DoInit();
+  void __TryCloseMaskWindow();
 }

@@ -1,4 +1,4 @@
-#include "showWindowHook.h"
+ï»¿#include "showWindowHook.h"
 
 #include <Windows.h>
 #include "detours.h"
@@ -15,13 +15,13 @@ ShowWindow_t TrueShowWindow = ShowWindow;
 typedef BOOL(WINAPI* SetWindowName_t)(HWND hWnd, LPCTSTR text);
 SetWindowName_t TrueSetWindowText = SetWindowText;
 
-static BOOL WINAPI HookedShowWindow(HWND hWnd, int nCmdShow)	// ³¢ÊÔÔÚ showWindow Ê±Ö±½ÓÅĞ¶Ïµ±Ç° window ÊÇ²»ÊÇ smbx µÄÖ÷´°¿Ú
-																// µ«ÊÇÓĞÊ±ºò(³ÌĞòÔÚÄ³Â·¾¶µÚÒ»´ÎÆô¶¯Ê±)Õâ¸öº¯Êı²¢²»»á±»µ÷ÓÃ
-																// ²»ÖªµÀÎªÊ²Ã´......¾ßÌå»¹ÔÚË¼¿¼ÖĞ
-																// ÓÉÓÚÉÏÊöÎÊÌâ, ÔÚ smbxContext.cpp ÖĞÎÒ»¹ÁíÍâ×öÁË¶µµ×
+static BOOL WINAPI HookedShowWindow(HWND hWnd, int nCmdShow)	// å°è¯•åœ¨ showWindow æ—¶ç›´æ¥åˆ¤æ–­å½“å‰ window æ˜¯ä¸æ˜¯ smbx çš„ä¸»çª—å£
+                                                              // ä½†æ˜¯æœ‰æ—¶å€™(ç¨‹åºåœ¨æŸè·¯å¾„ç¬¬ä¸€æ¬¡å¯åŠ¨æ—¶)è¿™ä¸ªå‡½æ•°å¹¶ä¸ä¼šè¢«è°ƒç”¨
+                                                              // ä¸çŸ¥é“ä¸ºä»€ä¹ˆ......å…·ä½“è¿˜åœ¨æ€è€ƒä¸­
+                                                              // ç”±äºä¸Šè¿°é—®é¢˜, åœ¨ smbxContext.cpp ä¸­æˆ‘è¿˜å¦å¤–åšäº†å…œåº•
 {
-	SMBX::__Try_LoadWnd(hWnd, nCmdShow);
-	return TrueShowWindow(hWnd, nCmdShow);
+  SMBX::__Try_LoadWnd(hWnd, nCmdShow);
+  return TrueShowWindow(hWnd, nCmdShow);
 }
 
 
@@ -29,29 +29,29 @@ static BOOL WINAPI HookedSetWindowText(HWND hWnd, LPCTSTR text) { return TrueSet
 
 namespace ExEngine::Hook
 {
-	void AttachShowWindowDetours()
-	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)TrueShowWindow, HookedShowWindow);
-		auto hr = DetourTransactionCommit();
+  void AttachShowWindowDetours()
+  {
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    DetourAttach(&(PVOID&)TrueShowWindow, HookedShowWindow);
+    auto hr = DetourTransactionCommit();
 
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)TrueSetWindowText, HookedSetWindowText);
-		DetourTransactionCommit();
-	}
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    DetourAttach(&(PVOID&)TrueSetWindowText, HookedSetWindowText);
+    DetourTransactionCommit();
+  }
 
-	void DetachShowWindowDetours()
-	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(&(PVOID&)TrueShowWindow, HookedShowWindow);
-		DetourTransactionCommit();
+  void DetachShowWindowDetours()
+  {
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    DetourDetach(&(PVOID&)TrueShowWindow, HookedShowWindow);
+    DetourTransactionCommit();
 
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(&(PVOID&)TrueSetWindowText, HookedSetWindowText);
-		DetourTransactionCommit();
-	}
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    DetourDetach(&(PVOID&)TrueSetWindowText, HookedSetWindowText);
+    DetourTransactionCommit();
+  }
 }

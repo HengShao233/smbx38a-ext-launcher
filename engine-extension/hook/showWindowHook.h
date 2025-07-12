@@ -2,6 +2,6 @@
 
 namespace ExEngine::Hook
 {
-	void AttachShowWindowDetours();
-	void DetachShowWindowDetours();
+  void AttachShowWindowDetours();
+  void DetachShowWindowDetours();
 }

@@ -2,6 +2,6 @@
 
 namespace ExEngine::Hook
 {
-	void Attach();
-	void Detach();
+  void Attach();
+  void Detach();
 }

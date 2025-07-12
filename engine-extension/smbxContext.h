@@ -4,22 +4,22 @@
 
 namespace ExEngine::SMBX
 {
-	struct SmbxCtx
-	{
-		HWND MainWindow = NULL;
-		HINSTANCE Instance = NULL;
-	};
+  struct SmbxCtx
+  {
+    HWND MainWindow = NULL;
+    HINSTANCE Instance = NULL;
+  };
 
-	const SmbxCtx& Get();
+  const SmbxCtx& Get();
 
-	struct GameWnd
-	{
-		HWND HWnd;
+  struct GameWnd
+  {
+    HWND HWnd;
 
-		int Width;
-		int Height;
-		float DPI;
-	};
+    int Width;
+    int Height;
+    float DPI;
+  };
 
-	void __Try_LoadWnd_Update();
+  void __Try_LoadWnd_Update();
 }
