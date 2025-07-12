@@ -30,7 +30,7 @@ add_compile_options(
     /nologo
     /W4 /WX
     /we4777 /we4800
-    /Zi /Gy /Gm- /Zl /Od
+    /Zi /Gy /Gm- /Zl
 )
 
 # 调试宏定义
