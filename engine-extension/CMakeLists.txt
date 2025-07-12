@@ -71,7 +71,7 @@ foreach(hlsl_file IN LISTS HLSL_SOURCES)
 endforeach()
 
 # 创建着色器编译目标
-add_custom_target(CompileShaders ALL
+add_custom_target(shaders ALL
     DEPENDS ${HLSL_OBJECTS}
 )
 
@@ -82,4 +82,4 @@ install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders/
 )
 
 # 确保在构建主目标前编译着色器
-add_dependencies(${PROJECT_NAME} CompileShaders)
+add_dependencies(${PROJECT_NAME} shaders)

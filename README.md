@@ -7,23 +7,46 @@
 
 ## 环境配置
 
-由于 SMBX 38a 只运行在 windows 环境中，该项目不需要考虑为其它运行环境生成可执行程序。为了方便管理，该项目使用 VS 2019 作为构建管理工具。在拉取了项目（包括 detours 子模块，特殊地，detours 使用 VS 2019 构建）后，直接打开 smbx-enginex.sln 即可。
+需要预先安装：
 
-### 编译设置
+- ninja（需要配置在环境变量里）
+- cmake（3.24+ 版本）
+- visual studio code（含 cmake tools、clangd 插件）
+- visual studio 2019 **或** visual studio 2022（项目需要使用 msvc 编译，且 c++ 版本要高于 20）。
 
-由于 C++ 标准和平台工具集版本选择上的失策，目前该项目只能在 windows10 及以上的 x86 windows 台式机上编译成功……由于 SMBX 源程序为 32 位，我们的项目也需要将编译目标设置为 32 位。
+### 工程文件及编译
 
-在 smbx-enginex.sln 打开无误后，逐个编译各个子工程即可：
+安装好上述软件和工具链后使用 visual studio code 打开 `./smbx-enginex.code-workspace`，编译器选择 `Visual Studio Community 2022/2019 Release - x86`
 
-![image-20250105210956584](./doc/img/README/image-20250105211039419.png)
-![image-20250105211052550](./doc/img/README/image-20250105211052550.png)
+![image-20250712202112858](./doc/img/README/image-20250712202112858.png)
 
-### 运行生成结果
+在侧边栏选择“生成所有项目”
 
-该项目的生成结构需要依附于 SMBX 源程序运行。在编译完成后请将 smbx-enginex.sln 同级目录下的 assets.zip 与 engine.zip 解压缩到编译目标下的同名文件夹：
-![image-20250105211423362](./doc/img/README/image-20250105211423362.png)
+![image-20250712202540024](./doc/img/README/image-20250712202540024.png)
 
-**main.exe** 为项目的入口程序，其会尝试将 ./assets/main 中的入口关卡提供给 ./engine/engine-ext.exe。。
+### 构建制品
+
+如果成功构建，构建制品见 ./build 目录。
+
+- `./build/engine-extension/engine-extension.dll`：该文件是扩展引擎的核心库。
+- `./build/main/main.exe`：该文件是扩展引擎的启动器。
+- `./build/redirection/redirection.dll`：该文件负责在 engine-ext.exe 启动时拉起扩展引擎。
+- `./build/shaders/*.cso`：这些 cso 文件是 `./engine-extension/shaders/` 下所有着色器的编译制品，着色器的类型判定遵循如下规则：
+  - 以 `_vs` 结尾的、以 `vert` 开头的、以 `_v` 结尾的会判定为顶点着色器，入口函数为 main
+  - 以 `_ps` 结尾的、以 `pix` 开头的、以 `_p` 结尾的会被判定为像素着色器，入口函数为 main
+  - 以 `_cs` 结尾的、以 `_c` 开头的会被判定为计算着色器，入口函数为 main
+
+### 成品目录结构
+
+大体结构参考 `./template` 目录：
+
+- 将构建制品中的 main.exe 和 engine-extension.dll 放到 `./` 目录（根目录）下。
+- 将 smbx38a editor 放到 `./engine` 目录下，并删除原 editor.exe（smbx.exe）。我们使用打了补丁的 engine-ext.exe 作为 smbx 本体的启动程序。
+- 将构建制品中的 redirection.dll 放到 `./engine` 目录下。
+- 将构建制品中的着色器编译结果 （`*.cso`）放到 `./assets/shaders/`目录下。
+- 将游戏关卡放到 `./assets/game` 目录下。并用记事本编辑该目录下的 main 文件。该文件分为两行，第一行为从 `./`目录到关卡文件的路径，第二行为打开游戏后的窗口名（扩展引擎靠这个定位到 smbx 的主窗口对象，如果不填第二行窗口名则默认为 `Super Mario Bros. X by 38A - Version 1.4.5`）。
+
+配置好上述结构后打开根目录的 main.exe 即可进入游戏。
 
 ## 项目结构
 
