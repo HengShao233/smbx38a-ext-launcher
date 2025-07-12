@@ -13,4 +13,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 add_subdirectory(main)
 add_subdirectory(redirection)
+
+add_subdirectory(detours)
 add_subdirectory(engine-extension)

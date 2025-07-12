@@ -1,5 +1,4 @@
 #include "../hook/hook.h"
-#pragma comment(lib, "../detours/lib.X86/detours.lib")
 
 #include "../hook/d3d9/d3dHook.h"
 #include "msgBoxHook.h"
