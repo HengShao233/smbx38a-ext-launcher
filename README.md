@@ -38,7 +38,7 @@
 
 ### 成品目录结构
 
-大体结构参考 `./template` 目录：
+大体结构参考 `./template` 目录，以下**步骤以该目录作为根目录**：
 
 - 将构建制品中的 main.exe 和 engine-extension.dll 放到 `./` 目录（根目录）下。
 - 将 smbx38a editor 放到 `./engine` 目录下，并删除原 editor.exe（smbx.exe）。我们使用打了补丁的 engine-ext.exe 作为 smbx 本体的启动程序。
