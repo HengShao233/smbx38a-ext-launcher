@@ -1,4 +1,4 @@
-#include "winapiUtil.h"
+﻿#include "winapiUtil.h"
 #include "strUtil.h"
 
 namespace ExEngine::Util

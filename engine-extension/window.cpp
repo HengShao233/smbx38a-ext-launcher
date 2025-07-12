@@ -1,4 +1,4 @@
-#include "window.h"
+ï»¿#include "window.h"
 
 #include "event.h"
 #include "util/uuidGen.h"
@@ -69,8 +69,8 @@ namespace ExEngine
     LPCTSTR SMBX_EXT_GAME_CLASSNAME = TEXT("SMBX_EXT_GAME_CLASS");
     LPCTSTR SMBX_EXT_MASK_GAME_CLASSNAME = TEXT("SMBX_EXT_MASK_GAME_CLASS");
     static bool _wndClassRegistered = false;
-    static void CreateGameWnd(HWND parent, HINSTANCE hInstance, int nCmdShow)   // ´´½¨Íâ¹ÒÒıÇæÖ÷´°¿Ú(È«ÆÁµÄÓÎÏ·´°¿Ú)
-        // ¾­ÓÉÆô¶¯Æ÷´¦ÀíºóÕâ¸ö¾ÍÊÇ³ÊÏÖ¸øÍæ¼ÒµÄ×îÖÕÊÓÍ¼
+    static void CreateGameWnd(HWND parent, HINSTANCE hInstance, int nCmdShow)   // åˆ›å»ºå¤–æŒ‚å¼•æ“ä¸»çª—å£(å…¨å±çš„æ¸¸æˆçª—å£)
+        // ç»ç”±å¯åŠ¨å™¨å¤„ç†åè¿™ä¸ªå°±æ˜¯å‘ˆç°ç»™ç©å®¶çš„æœ€ç»ˆè§†å›¾
     {
         int screenWidth = GetSystemMetrics(SM_CXSCREEN);
         int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -89,18 +89,18 @@ namespace ExEngine
         auto h = screenHeight;
 
         _GAME_WND = CreateWindowEx(
-            0,                                // À©Õ¹·ç¸ñ
-            SMBX_EXT_GAME_CLASSNAME,          // ´°¿ÚÀàÃû
-            TEXT("Game"),                     // ´°¿Ú±êÌâ
-            WS_POPUP | WS_VISIBLE,            // ´°¿ÚÑùÊ½
+            0,                                // æ‰©å±•é£æ ¼
+            SMBX_EXT_GAME_CLASSNAME,          // çª—å£ç±»å
+            TEXT("Game"),                     // çª—å£æ ‡é¢˜
+            WS_POPUP | WS_VISIBLE,            // çª—å£æ ·å¼
             0,
-            0,                                // ³õÊ¼Î»ÖÃ
+            0,                                // åˆå§‹ä½ç½®
             w,
-            h,                                // ´óĞ¡¸²¸ÇÕû¸öÆÁÄ»
-            parent,                           // ¸¸´°¿Ú
-            NULL,                             // ²Ëµ¥
-            hInstance,                        // ÊµÀı¾ä±ú
-            NULL                              // ¸½¼Ó²ÎÊı
+            h,                                // å¤§å°è¦†ç›–æ•´ä¸ªå±å¹•
+            parent,                           // çˆ¶çª—å£
+            NULL,                             // èœå•
+            hInstance,                        // å®ä¾‹å¥æŸ„
+            NULL                              // é™„åŠ å‚æ•°
         );
 
         _oriWndProc = (WNDPROC)SetWindowLongPtr(parent, GWLP_WNDPROC, (LONG_PTR)NewWndProc);
@@ -109,8 +109,8 @@ namespace ExEngine
 
         using namespace XD::Event;
 
-        // ·¢ËÍÖ÷ÊÓ´°´´½¨Íê±ÏµÄÊÂ¼ş
-        // ½ÓÏÂÀ´Ó¦¸ÃÊÇ´´½¨ dx11 ÊµÀı
+        // å‘é€ä¸»è§†çª—åˆ›å»ºå®Œæ¯•çš„äº‹ä»¶
+        // æ¥ä¸‹æ¥åº”è¯¥æ˜¯åˆ›å»º dx11 å®ä¾‹
         StaticEventMgr::broadcastAsync<ExWndCreated>(SMBX::GameWnd{
             .HWnd = _GAME_WND,
             .Width = w,
@@ -164,18 +164,18 @@ namespace ExEngine
         RegisterClass(&wc);
 
         _TEMP_MASK_WINDOW = CreateWindowEx(
-            WS_EX_TOOLWINDOW,                 // À©Õ¹·ç¸ñ
-            SMBX_EXT_MASK_GAME_CLASSNAME,     // ´°¿ÚÀàÃû
-            TEXT("Game"),                     // ´°¿Ú±êÌâ
-            WS_POPUP | WS_VISIBLE,            // ´°¿ÚÑùÊ½
+            WS_EX_TOOLWINDOW,                 // æ‰©å±•é£æ ¼
+            SMBX_EXT_MASK_GAME_CLASSNAME,     // çª—å£ç±»å
+            TEXT("Game"),                     // çª—å£æ ‡é¢˜
+            WS_POPUP | WS_VISIBLE,            // çª—å£æ ·å¼
             0,
-            0,                                // ³õÊ¼Î»ÖÃ
+            0,                                // åˆå§‹ä½ç½®
             screenWidth,
-            screenHeight,                     // ´óĞ¡¸²¸ÇÕû¸öÆÁÄ»
-            NULL,                             // ¸¸´°¿Ú
-            NULL,                             // ²Ëµ¥
-            hInstance,                        // ÊµÀı¾ä±ú
-            NULL                              // ¸½¼Ó²ÎÊı
+            screenHeight,                     // å¤§å°è¦†ç›–æ•´ä¸ªå±å¹•
+            NULL,                             // çˆ¶çª—å£
+            NULL,                             // èœå•
+            hInstance,                        // å®ä¾‹å¥æŸ„
+            NULL                              // é™„åŠ å‚æ•°
         );
         if (!_TEMP_MASK_WINDOW) return;
         ShowWindow(_TEMP_MASK_WINDOW, SW_SHOW);
