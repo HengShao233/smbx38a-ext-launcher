@@ -1,6 +1,7 @@
 #include "renderInit.h"
 
 #include "renderInternalDef.h"
+#include "util/logger.h"
 
 namespace ExEngine::Render
 {

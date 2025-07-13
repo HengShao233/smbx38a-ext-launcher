@@ -2,9 +2,6 @@
 
 #include <Windows.h>
 #include "detours.h"
-#include "../util/logger.h"
-#include "../util/strUtil.h"
-#include "../util/winapiUtil.h"
 
 using namespace ExEngine;
 namespace ExEngine::SMBX { bool __Try_LoadWnd(HWND hWnd, int cmd); }
@@ -33,12 +30,12 @@ namespace ExEngine::Hook
   {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourAttach(&(PVOID&)TrueShowWindow, HookedShowWindow);
+    DetourAttach(&(PVOID&)TrueShowWindow, (void**)HookedShowWindow);
     auto hr = DetourTransactionCommit();
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourAttach(&(PVOID&)TrueSetWindowText, HookedSetWindowText);
+    DetourAttach(&(PVOID&)TrueSetWindowText, (void**)HookedSetWindowText);
     DetourTransactionCommit();
   }
 
@@ -46,12 +43,12 @@ namespace ExEngine::Hook
   {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourDetach(&(PVOID&)TrueShowWindow, HookedShowWindow);
+    DetourDetach(&(PVOID&)TrueShowWindow, (void**)HookedShowWindow);
     DetourTransactionCommit();
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourDetach(&(PVOID&)TrueSetWindowText, HookedSetWindowText);
+    DetourDetach(&(PVOID&)TrueSetWindowText, (void**)HookedSetWindowText);
     DetourTransactionCommit();
   }
 }

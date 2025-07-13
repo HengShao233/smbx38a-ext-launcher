@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <Windows.h>
-#include "../smbxContext.h"
+#include "../smbx/smbxContext.h"
 
 namespace ExEngine::Render
 {

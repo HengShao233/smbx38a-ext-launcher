@@ -1,10 +1,9 @@
 #include "d3dHook.h"
 #include "d3d9Wrapper.h"
 
-#include <fstream>
 #include <detours.h>
 
-ExEngine::Hook::D3D::D3D9Warpper* G_D3D9 = NULL;
+ExEngine::Hook::D3D::D3D9Wrapper* G_D3D9 = NULL;
 
 typedef IDirect3D9* (APIENTRY* Direct3DCreate9_t)(UINT);
 Direct3DCreate9_t TrueDirect3DCreate9 = nullptr;
@@ -12,7 +11,7 @@ Direct3DCreate9_t TrueDirect3DCreate9 = nullptr;
 static IDirect3D9* APIENTRY HookedDirect3DCreate9(UINT SDKVersion)
 {
   auto inst = TrueDirect3DCreate9(SDKVersion);
-  return G_D3D9 = new ExEngine::Hook::D3D::D3D9Warpper(inst);
+  return G_D3D9 = new ExEngine::Hook::D3D::D3D9Wrapper(inst);
 }
 
 namespace ExEngine::Hook
@@ -25,7 +24,7 @@ namespace ExEngine::Hook
 
       DetourTransactionBegin();
       DetourUpdateThread(GetCurrentThread());
-      DetourAttach(&(PVOID&)TrueDirect3DCreate9, HookedDirect3DCreate9);
+      DetourAttach(&(PVOID&)TrueDirect3DCreate9, (void**)HookedDirect3DCreate9);
       DetourTransactionCommit();
     }
   }
@@ -34,7 +33,7 @@ namespace ExEngine::Hook
   {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourDetach(&(PVOID&)TrueDirect3DCreate9, HookedDirect3DCreate9);
+    DetourDetach(&(PVOID&)TrueDirect3DCreate9, (void**)HookedDirect3DCreate9);
     DetourTransactionCommit();
   }
 }

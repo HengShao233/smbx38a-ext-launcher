@@ -2,8 +2,8 @@
 
 #include <Windows.h>
 
-#include "smbxContext.h"
-#include "util/staticEventMgr.hpp"
+#include "smbx/smbxContext.h"
+#include "../staticEventMgr.hpp"
 
 namespace XD::Event
 {

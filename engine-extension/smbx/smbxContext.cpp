@@ -1,13 +1,10 @@
 ﻿#include "util/logger.h"
 #include "util/winapiUtil.h"
 #include "smbxContext.h"
-#include "event.h"
+#include "util/events/event.h"
 
 #include <memory>
 #include <string>
-#include <mutex>
-
-#include "detours.h"
 
 namespace ExEngine::SMBX
 {
@@ -80,7 +77,7 @@ namespace ExEngine::SMBX
     }
   }
 
-  static BOOL CALLBACK FindWindowProc(HWND hwnd, LPARAM lParam)	// 寻找一个符合条件的窗口
+  static BOOL CALLBACK FindWindowProc(HWND hwnd, LPARAM lParam) // 寻找一个符合条件的窗口
   {
     if (_HWND_WAIT) return FALSE;
     static std::chrono::time_point<std::chrono::steady_clock> start =
@@ -96,7 +93,7 @@ namespace ExEngine::SMBX
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     // 如果超过 20 秒还没找到任何一个符合条件的 smbx 主窗口, 则强制退出进程
-    if (duration.count() > 20000) { 
+    if (duration.count() > 20000) {
       Logger::Info("find window fail: %i", processId);
       ExitProcess(-4);
       return FALSE;
@@ -104,7 +101,7 @@ namespace ExEngine::SMBX
     return TRUE;
   }
 
-  void __LoadWindowSupplement()	// 这里是为了预防 smbx 没调用 showWindow 函数而做的强制搜索
+  void __LoadWindowSupplement() // 这里是为了预防 smbx 没调用 showWindow 函数而做的强制搜索
                                 // 遍历该进程下的所有 HWND 实例, 找到 smbx 的游戏主窗口
                                 // 如果找到了就存在 _HWND_WAIT 里, 由 smbx 主循环启动创建外挂引擎 __Try_LoadWnd_Update()
   {

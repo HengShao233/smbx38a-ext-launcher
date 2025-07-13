@@ -1,4 +1,3 @@
-#include <fstream>
 #include <Windows.h>
 
 #include <detours.h>
@@ -40,19 +39,19 @@ namespace ExEngine::Hook {
   void AttachMsgBoxDetours() {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourAttach(&(PVOID&)TrueMessageBoxW, HookedMessageBoxW);
+    DetourAttach(&(PVOID&)TrueMessageBoxW, (void**)HookedMessageBoxW);
     DetourTransactionCommit();
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourAttach(&(PVOID&)TrueMessageBoxA, HookedMessageBoxA);
+    DetourAttach(&(PVOID&)TrueMessageBoxA, (void**)HookedMessageBoxA);
     DetourTransactionCommit();
   }
 
   void DetachMsgBoxDetours() {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    DetourDetach(&(PVOID&)TrueMessageBoxA, HookedMessageBoxA);
+    DetourDetach(&(PVOID&)TrueMessageBoxA, (void**)HookedMessageBoxA);
     DetourTransactionCommit();
   }
 }

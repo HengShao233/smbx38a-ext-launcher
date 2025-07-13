@@ -1,6 +1,19 @@
 {
     "folders": [{"path": "."}],
     "settings": {
-        "cmake.generator": "Ninja"
+        "cmake.generator": "Ninja",
+        "cSpell.words": [
+            "DRENDERSTATETYPE",
+            "dxgi",
+            "enginex",
+            "HINSTANCE",
+            "HRESULT",
+            "IDXGI",
+            "lstrlen",
+            "REFIID",
+            "riid",
+            "SMBX",
+            "XMFLOAT"
+        ]
     }
 }

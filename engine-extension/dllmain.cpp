@@ -1,6 +1,4 @@
-﻿// dllmain.cpp : 定义 DLL 应用程序的入口点。
-#include "Windows.h"
-#include <string>
+﻿#include <string>
 
 void MainEnd();
 void MainStart();
@@ -17,7 +15,7 @@ namespace ExEngine::Logger { void __DebugLogUtil_DeInitLog(); }
 #include <chrono>
 #include <fstream>
 
-#include "../util/logger.h"
+#include "util/logger.h"
 
 class Updater
 {
@@ -86,4 +84,5 @@ extern "C" __declspec(dllexport) void engineStart()
   G_UPD = std::make_unique<Updater>();
 }
 
+#include "Windows.h"
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) { return TRUE; }

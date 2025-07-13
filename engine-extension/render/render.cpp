@@ -1,9 +1,10 @@
-#include "../event.h"
+#include "../util/events/event.h"
 
 #include "renderInit.h"
 #include "renderInternalDef.h"
 
 #include "drawable/quad.h"
+#include "util/uuidGen.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -104,9 +105,9 @@ namespace ExEngine::Render
   void DeInit()
   {
     if (!_ctx) return;
-    _ctx.release();
+    { auto _ = _ctx.release(); }
 
     if (!_res) return;
-    _res.release();
+    { auto _ = _res.release(); }
   }
 }

@@ -4,11 +4,11 @@
 
 namespace ExEngine::Hook::D3D
 {
-	class D3D9DevWarpper : public IDirect3DDevice9
+	class D3D9DevWrapper : public IDirect3DDevice9
 	{
   public:
-    D3D9DevWarpper(IDirect3DDevice9* pDirect3DDevice9, IDirect3D9* pDirect3D9, D3DPRESENT_PARAMETERS* pPresentationParameters);
-    virtual ~D3D9DevWarpper();
+    D3D9DevWrapper(IDirect3DDevice9* pDirect3DDevice9, IDirect3D9* pDirect3D9, D3DPRESENT_PARAMETERS* pPresentationParameters);
+    virtual ~D3D9DevWrapper();
 
     /*** IUnknown methods ***/
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj);

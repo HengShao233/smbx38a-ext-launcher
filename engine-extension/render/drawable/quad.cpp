@@ -1,4 +1,5 @@
-#include "quad.h"
+﻿#include "quad.h"
+#include "util/logger.h"
 
 namespace ExEngine::Render
 {
@@ -122,15 +123,15 @@ namespace ExEngine::Render
   }
 
   Vertex Quad::_vert[4] = {
-    { DirectX::XMFLOAT3(-1.0f, 1.0f, 0.001f), DirectX::XMFLOAT2(0.0f, 0.0f) },  // ����
-    { DirectX::XMFLOAT3(1.0f, 1.0f, 0.001f), DirectX::XMFLOAT2(1.0f, 0.0f) },  // ����
-    { DirectX::XMFLOAT3(-1.0f, -1.0f, 0.001f), DirectX::XMFLOAT2(0.0f, 1.0f) }, // ����
-    { DirectX::XMFLOAT3(1.0f, -1.0f, 0.001f), DirectX::XMFLOAT2(1.0f, 1.0f) }, // ����
+    { DirectX::XMFLOAT3(-1.0f, 1.0f, 0.001f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+    { DirectX::XMFLOAT3(1.0f, 1.0f, 0.001f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+    { DirectX::XMFLOAT3(-1.0f, -1.0f, 0.001f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+    { DirectX::XMFLOAT3(1.0f, -1.0f, 0.001f), DirectX::XMFLOAT2(1.0f, 1.0f) },
   };
 
   UINT Quad::_indices[6] = {
-    0, 1, 2, // ��һ��������
-    2, 1, 3  // �ڶ���������
+    0, 1, 2,
+    2, 1, 3
   };
 
   ComPtr<ID3D11Buffer> Quad::_vertBuffer = nullptr;

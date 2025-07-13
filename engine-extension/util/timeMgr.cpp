@@ -1,12 +1,9 @@
 #include "timeMgr.h"
 
-#include <list>
 #include <memory>
 #include <queue>
 #include <utility>
 #include <mutex>
-
-#include "logger.h"
 
 namespace XD::Util::TimeMgr
 {
@@ -84,6 +81,6 @@ namespace XD::Util::TimeMgr
   void destroy()
   {
     if (!_inst) return;
-    _inst.release();
+    auto _ = _inst.release();
   }
 } // namespace XD::Util::TimeMgr

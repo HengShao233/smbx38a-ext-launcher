@@ -6,9 +6,8 @@
 #include "util/timeMgr.h"
 #include "util/staticEventMgr.hpp"
 
-#include "window.h"
+#include "wnd/window.h"
 #include "render/render.h"
-#include "smbxContext.h"
 
 // 外挂引擎启动
 void MainStart()

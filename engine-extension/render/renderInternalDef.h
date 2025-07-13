@@ -1,9 +1,7 @@
 #pragma once
 
-#include "render.h"
-#include "../util/logger.h"
-#include "../util/uuidGen.h"
-#include "../smbxContext.h"
+#include <d3d9.h>
+#include "../smbx/smbxContext.h"
 
 #include <wrl.h>
 #include <dxgi.h>
@@ -12,11 +10,9 @@
 
 #include <d3dcompiler.h>
 
-#include <set>
-#include <queue>
 #include <mutex>
 #include <memory>
-#include <thread>
+#include <unordered_map>
 
 #define SMBX_RENDER_TEXTURE_POOL_CNT 16
 

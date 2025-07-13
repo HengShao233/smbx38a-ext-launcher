@@ -1,13 +1,10 @@
 ﻿#include "window.h"
 
-#include "event.h"
+#include "util/events/event.h"
 #include "util/uuidGen.h"
 
-#include "util/logger.h"
-#include "smbxContext.h"
-
+#include "smbx/smbxContext.h"
 #include "util/winapiUtil.h"
-#include "util/timeMgr.h"
 
 namespace ExEngine
 {

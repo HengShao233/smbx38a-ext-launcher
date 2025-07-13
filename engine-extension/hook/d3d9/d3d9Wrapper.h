@@ -4,11 +4,11 @@
 
 namespace ExEngine::Hook::D3D
 {
-  class D3D9Warpper : public IDirect3D9
+  class D3D9Wrapper : public IDirect3D9
   {
   public:
-    D3D9Warpper(LPDIRECT3D9 pDirect3D);
-    virtual ~D3D9Warpper();
+    D3D9Wrapper(LPDIRECT3D9 pDirect3D);
+    virtual ~D3D9Wrapper();
 
     /*** IUnknown methods ***/
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj);

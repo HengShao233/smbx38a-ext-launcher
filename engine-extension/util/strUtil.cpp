@@ -1,7 +1,6 @@
 #include "strUtil.h"
 
 #include <string>
-#include "logger.h"
 
 namespace ExEngine::Util
 {

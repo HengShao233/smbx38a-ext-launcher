@@ -1,18 +1,14 @@
 #include "getMessageHook.h"
 
 #include <Windows.h>
-#include <fstream>
 #include <detours.h>
-
-#include "../util/logger.h"
-#include "../util/strUtil.h"
 
 typedef int (WINAPI* GetMesage_t)(
   _Out_ LPMSG lpMsg,
   _In_opt_ HWND hWnd,
   _In_ UINT wMsgFilterMin,
   _In_ UINT wMsgFilterMax);
-GetMesage_t TrueGetMesage = GetMessage;
+GetMesage_t TrueGetMessage = GetMessage;
 
 typedef BOOL (WINAPI* PeekMessage_t)(
   _Out_ LPMSG lpMsg,
@@ -22,13 +18,13 @@ typedef BOOL (WINAPI* PeekMessage_t)(
   _In_ UINT wRemoveMsg);
 PeekMessage_t TruePeekMessage = PeekMessage;
 
-static int WINAPI HookedGetMesage(
+static int WINAPI HookedGetMessage(
   _Out_ LPMSG lpMsg,
   _In_opt_ HWND hWnd,
   _In_ UINT wMsgFilterMin,
   _In_ UINT wMsgFilterMax
 ) {
-  return TrueGetMesage(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+  return TrueGetMessage(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
 }
 
 bool _INITED = false;
@@ -47,12 +43,12 @@ void ExEngine::Hook::AttachGetMessageDetours()
 {
   DetourTransactionBegin();
   DetourUpdateThread(GetCurrentThread());
-  DetourAttach(&(PVOID&)TrueGetMesage, HookedGetMesage);
+  DetourAttach(&(PVOID&)TrueGetMessage, (void**)HookedGetMessage);
   DetourTransactionCommit();
 
   DetourTransactionBegin();
   DetourUpdateThread(GetCurrentThread());
-  DetourAttach(&(PVOID&)TruePeekMessage, HookedPeekMessage);
+  DetourAttach(&(PVOID&)TruePeekMessage, (void**)HookedPeekMessage);
   DetourTransactionCommit();
 }
 
@@ -60,11 +56,11 @@ void ExEngine::Hook::DetachGetMessageDetours()
 {
   DetourTransactionBegin();
   DetourUpdateThread(GetCurrentThread());
-  DetourDetach(&(PVOID&)TrueGetMesage, HookedGetMesage);
+  DetourDetach(&(PVOID&)TrueGetMessage, (void**)HookedGetMessage);
   DetourTransactionCommit();
 
   DetourTransactionBegin();
   DetourUpdateThread(GetCurrentThread());
-  DetourDetach(&(PVOID&)TruePeekMessage, HookedPeekMessage);
+  DetourDetach(&(PVOID&)TruePeekMessage, (void**)HookedPeekMessage);
   DetourTransactionCommit();
 }

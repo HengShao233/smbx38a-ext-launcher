@@ -3,7 +3,6 @@
 #include <chrono>
 #include <ctime>
 #include <functional>
-#include <thread>
 
 namespace XD::Util::TimeMgr
 {
