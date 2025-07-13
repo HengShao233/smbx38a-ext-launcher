@@ -5,17 +5,19 @@
 #include "../util/logger.h"
 #include "../util/strUtil.h"
 
+#include "smbx/smbxNotify.h"
+
 typedef int (WINAPI* MessageBoxW_t)(HWND, LPCWSTR, LPCWSTR, UINT);
 MessageBoxW_t TrueMessageBoxW = MessageBoxW;
 
 static int WINAPI HookedMessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType) {
   auto len = lstrlenW(lpText);
-  if (len < 2 || lpText[0] != TEXT(':') || lpText[1] != TEXT(':')) return TrueMessageBoxW(hWnd, lpText, lpCaption, uType);
+  if (len < 2 || lpCaption[0] != TEXT(':') || lpCaption[1] != TEXT(':')) return TrueMessageBoxW(hWnd, lpText, lpCaption, uType);
 
   auto content = ExEngine::Util::W2S(lpText);
   auto title = ExEngine::Util::W2S(lpCaption);
 
-  ExEngine::Logger::Info("msgBox: %s, %s", title.c_str(), content.c_str());
+  ExEngine::SMBX::Notify::Push(true, title, content);
   return IDOK;
 }
 

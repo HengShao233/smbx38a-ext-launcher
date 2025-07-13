@@ -8,12 +8,16 @@
             "enginex",
             "HINSTANCE",
             "HRESULT",
+            "IDOK",
             "IDXGI",
             "lstrlen",
             "REFIID",
             "riid",
             "SMBX",
             "XMFLOAT"
-        ]
+        ],
+
+        "files.trimTrailingWhitespace": true,
+        "editor.tabSize": 2,
     }
 }

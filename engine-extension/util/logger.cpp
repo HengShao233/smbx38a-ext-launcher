@@ -146,6 +146,8 @@ void ExEngine::Logger::Warning(const char* msg, ...) noexcept
   *G_LOG_FILE << "[Warning] [" << CurrentDateTime() << "] " << buffer << std::endl;
 }
 
+bool ExEngine::Logger::IsDebug() noexcept { return true; }
+
 void ExEngine::Logger::__DebugLogUtil_DeInitLog()
 {
   if (G_LOG_FILE)
@@ -179,5 +181,7 @@ void ExEngine::Logger::__DebugLogUtil_DeInitLog()
 void ExEngine::Logger::Info(const char* msg, ...) noexcept {}
 void ExEngine::Logger::Error(const char* msg, ...) noexcept {}
 void ExEngine::Logger::Warning(const char* msg, ...) noexcept {}
+
+bool ExEngine::Logger::IsDebug() noexcept { return false; }
 
 #endif

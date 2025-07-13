@@ -1,6 +1,4 @@
-﻿#include <fstream>
-
-#include "hook/hook.h"
+﻿#include "hook/hook.h"
 #include "util/logger.h"
 
 #include "util/timeMgr.h"
@@ -83,7 +81,7 @@ void MainEnd()
     // de init module
     ExEngine::Render::DeInit();
 
-    // destory managers
+    // destroy managers
     XD::Util::TimeMgr::destroy();
     XD::Event::StaticEventMgr::destroy();
 
@@ -96,5 +94,5 @@ void MainEnd()
   }
 
   // enginex end
-  ExEngine::Logger::Info("engine-ext: destory");
+  ExEngine::Logger::Info("engine-ext: destroy");
 }

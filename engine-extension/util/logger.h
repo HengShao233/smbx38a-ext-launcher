@@ -2,6 +2,8 @@
 
 namespace ExEngine::Logger
 {
+  bool IsDebug() noexcept;
+
   void Info(const char* msg, ...) noexcept;
   void Warning(const char* msg, ...) noexcept;
   void Error(const char* msg, ...) noexcept;
